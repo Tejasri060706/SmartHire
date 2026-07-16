@@ -1,0 +1,165 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Representing Roles: "CANDIDATE" | "RECRUITER"
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  role         String     // "CANDIDATE" | "RECRUITER"
+  createdAt    DateTime   @default(now())
+  candidate    Candidate?
+  recruiter    Recruiter?
+}
+
+model Candidate {
+  id           String        @id @default(cuid())
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+  phone        String?
+  headline     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  resumes      Resume[]
+  applications Application[]
+  testAttempts TestAttempt[]
+  chatMessages ChatMessage[]
+}
+
+model Recruiter {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  companyName String
+  createdAt   DateTime @default(now())
+  jobs        Job[]
+}
+
+model Resume {
+  id               String        @id @default(cuid())
+  candidateId      String
+  candidate        Candidate     @relation(fields: [candidateId], references: [id])
+  fileUrl          String
+  rawText          String
+  parsedSkills     String        // JSON string array
+  parsedExperience String?
+  parsedEducation  String?
+  isLatest         Boolean       @default(true)
+  uploadedAt       DateTime      @default(now())
+  applications     Application[]
+}
+
+// JobStatus: "OPEN" | "CLOSED"
+model Job {
+  id              String        @id @default(cuid())
+  recruiterId     String
+  recruiter       Recruiter     @relation(fields: [recruiterId], references: [id])
+  title           String
+  description     String
+  requiredSkills  String        // JSON string array
+  roleCategory    String        // 'frontend' | 'backend' | 'ai-ml' — matches Test.roleCategory
+  status          String        @default("OPEN") // "OPEN" | "CLOSED"
+  createdAt       DateTime      @default(now())
+  applications    Application[]
+}
+
+// TestType: "GENERAL" | "ROLE_SPECIFIC"
+model Test {
+  id           String        @id @default(cuid())
+  type         String        // "GENERAL" | "ROLE_SPECIFIC"
+  roleCategory String?       // null for GENERAL, set for ROLE_SPECIFIC ('frontend' | 'backend' | 'ai-ml')
+  title        String
+  passScore    Int           @default(60) // percentage required to pass
+  createdAt    DateTime      @default(now())
+  questions    Question[]
+  attempts     TestAttempt[]
+}
+
+// Difficulty: "EASY" | "MEDIUM" | "HARD"
+model Question {
+  id           String       @id @default(cuid())
+  testId       String
+  test         Test         @relation(fields: [testId], references: [id])
+  questionText String
+  options      String       // JSON string array, e.g. ["A","B","C","D"]
+  correctIndex Int
+  topicTag     String       // e.g. 'logical-reasoning', 'sql', 'react-hooks'
+  difficulty   String       // "EASY" | "MEDIUM" | "HARD"
+  answers      TestAnswer[]
+}
+
+model TestAttempt {
+  id             String       @id @default(cuid())
+  candidateId    String
+  candidate      Candidate    @relation(fields: [candidateId], references: [id])
+  testId         String
+  test           Test         @relation(fields: [testId], references: [id])
+  score          Int          // percentage
+  totalQuestions Int
+  passed         Boolean
+  startedAt      DateTime     @default(now())
+  completedAt    DateTime?
+  answers        TestAnswer[]
+  applications   Application[] // applications gated by this attempt
+}
+
+model TestAnswer {
+  id            String      @id @default(cuid())
+  attemptId     String
+  attempt       TestAttempt @relation(fields: [attemptId], references: [id])
+  questionId    String
+  question      Question    @relation(fields: [questionId], references: [id])
+  selectedIndex Int
+  isCorrect     Boolean
+  topicTag      String
+}
+
+// ApplicationStatus: "APPLIED" | "SHORTLISTED" | "INTERVIEW_SCHEDULED" | "REJECTED" | "HIRED"
+model Application {
+  id                 String            @id @default(cuid())
+  candidateId        String
+  candidate          Candidate         @relation(fields: [candidateId], references: [id])
+  jobId              String
+  job                Job               @relation(fields: [jobId], references: [id])
+  resumeId           String
+  resume             Resume            @relation(fields: [resumeId], references: [id])
+  matchScore         Int               // 0-100
+  matchedSkills      String            // JSON string array
+  missingSkills      String            // JSON string array
+  gateTestAttemptId  String
+  gateTestAttempt    TestAttempt       @relation(fields: [gateTestAttemptId], references: [id])
+  status             String            @default("APPLIED") // "APPLIED" | "SHORTLISTED" | "INTERVIEW_SCHEDULED" | "REJECTED" | "HIRED"
+  appliedAt          DateTime          @default(now())
+  interview          Interview?
+
+  @@unique([candidateId, jobId]) // one application per candidate per job
+}
+
+// InterviewMode: "ONLINE" | "OFFLINE"
+// InterviewStatus: "SCHEDULED" | "COMPLETED" | "CANCELLED"
+model Interview {
+  id            String          @id @default(cuid())
+  applicationId String          @unique
+  application   Application     @relation(fields: [applicationId], references: [id])
+  scheduledTime DateTime
+  mode          String          // "ONLINE" | "OFFLINE"
+  status        String          @default("SCHEDULED") // "SCHEDULED" | "COMPLETED" | "CANCELLED"
+  notes         String?
+}
+
+// ChatSender: "CANDIDATE" | "AI"
+model ChatMessage {
+  id          String     @id @default(cuid())
+  candidateId String
+  candidate   Candidate  @relation(fields: [candidateId], references: [id])
+  sender      String     // "CANDIDATE" | "AI"
+  message     String
+  createdAt   DateTime   @default(now())
+}
