@@ -1,0 +1,23 @@
+# Environment files
+.env
+.env.*
+server/.env
+
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build output
+dist/
+build/
+
+# Uploads
+server/uploads/
+
+# Database
+server/prisma/dev.db
+
+# Logs
+*.log
+npm-debug.log*
