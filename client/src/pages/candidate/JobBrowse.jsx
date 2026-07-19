@@ -37,7 +37,13 @@ export default function JobBrowse() {
       const url = selectedCategory 
         ? `https://smarthire-backend-riay.onrender.com/api/jobs?category=${selectedCategory}`
         : 'https://smarthire-backend-riay.onrender.com/api/jobs';
-      const res = await axios.get(url);
+      const token = localStorage.getItem('token');
+
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setJobs(res.data.jobs);
     } catch (err) {
       console.error('Error fetching jobs:', err);
@@ -50,7 +56,16 @@ export default function JobBrowse() {
   const fetchApplications = async () => {
     try {
       // In M2: we retrieve candidates' applications list to check already applied jobs
-      const res = await axios.get('https://smarthire-backend-riay.onrender.com/api/candidate/applications');
+      const token = localStorage.getItem('token');
+
+const res = await axios.get(
+  'https://smarthire-backend-riay.onrender.com/api/candidate/applications',
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },  
+  }
+);
       const mapping = {};
       res.data.applications.forEach(app => {
         mapping[app.jobId] = app.status;
@@ -68,7 +83,17 @@ export default function JobBrowse() {
     setGateTestRequired(null);
 
     try {
-      const res = await axios.post(`https://smarthire-backend-riay.onrender.com/api/candidate/apply/${jobId}`);
+      const token = localStorage.getItem('token');
+
+const res = await axios.post(
+  `https://smarthire-backend-riay.onrender.com/api/candidate/apply/${jobId}`,
+  {},
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
       setSuccessMsg('Application submitted successfully!');
       setAppliedJobs(prev => ({ ...prev, [jobId]: 'APPLIED' }));
       // Scroll to top
