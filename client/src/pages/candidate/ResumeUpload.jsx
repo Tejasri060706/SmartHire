@@ -65,7 +65,7 @@ export default function ResumeUpload() {
     formData.append('resume', file);
 
     try {
-      const res = await axios.post('https://smarthire-backend-riay.onrender.com/api/resumes/upload', formData, {
+      const res = await axios.post('https://smarthire-backend-riay.onrender.com/api/resumes', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
