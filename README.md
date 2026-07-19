@@ -68,7 +68,7 @@ node prisma/seed.js
 ### 2. Start the Backend Server
 
 ```bash
-# Start backend on http://localhost:5000
+# Start backend on https://smarthire-backend-riay.onrender.com
 npm run dev
 ```
 

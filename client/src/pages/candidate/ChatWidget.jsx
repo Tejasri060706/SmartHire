@@ -30,7 +30,7 @@ export default function ChatWidget() {
   const fetchChatHistory = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/candidate/chat/history');
+      const res = await axios.get('https://smarthire-backend-riay.onrender.com/api/candidate/chat/history');
       setMessages(res.data.messages || []);
     } catch (err) {
       console.error('Failed to load chat history:', err);
@@ -63,7 +63,7 @@ export default function ChatWidget() {
     setMessages((prev) => [...prev, tempUserMsg]);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/candidate/chat', {
+      const res = await axios.post('https://smarthire-backend-riay.onrender.com/api/candidate/chat/send', {
         message: userMessage,
       });
       // Append AI response

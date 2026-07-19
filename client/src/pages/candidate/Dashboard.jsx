@@ -29,8 +29,8 @@ export default function CandidateDashboard() {
     setLoading(true);
     try {
       const [dashRes, analRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/candidate/dashboard'),
-        axios.get('http://localhost:5000/api/candidate/analysis'),
+        axios.get('https://smarthire-backend-riay.onrender.com/api/candidate/dashboard'),
+        axios.get('https://smarthire-backend-riay.onrender.com/api/candidate/analysis')
       ]);
       setDashboard(dashRes.data);
       setAnalysis(analRes.data);

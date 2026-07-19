@@ -26,7 +26,7 @@ export default function RecruiterDashboard() {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/recruiter/dashboard');
+      const res = await axios.get('https://smarthire-backend-riay.onrender.com/api/recruiter/dashboard');
       setStats(res.data);
     } catch (err) {
       console.error('Error fetching recruiter dashboard:', err);

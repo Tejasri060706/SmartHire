@@ -25,7 +25,7 @@ export default function ResumeUpload() {
 
   const fetchLatestResume = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/resumes/latest');
+      const res = await axios.get('https://smarthire-backend-riay.onrender.com/api/resumes/latest');
       setResume(res.data.resume);
     } catch (err) {
       console.log('No resume uploaded yet.');
@@ -65,7 +65,7 @@ export default function ResumeUpload() {
     formData.append('resume', file);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/resumes', formData, {
+      const res = await axios.post('https://smarthire-backend-riay.onrender.com/api/resumes/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

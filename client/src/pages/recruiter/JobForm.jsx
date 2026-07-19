@@ -30,7 +30,7 @@ export default function JobForm() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/jobs', {
+      await axios.post('https://smarthire-backend-riay.onrender.com/api/jobs', {
         title,
         description,
         requiredSkills,

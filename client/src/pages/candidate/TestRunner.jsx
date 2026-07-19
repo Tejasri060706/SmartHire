@@ -41,12 +41,12 @@ export default function TestRunner() {
     setError('');
     try {
       // 1. Create a test attempt record (validates resume upload rules)
-      const attemptRes = await axios.post(`http://localhost:5000/api/tests/${testId}/attempts`);
+      const attemptRes = await axios.post(`https://smarthire-backend-riay.onrender.com/api/tests/${testId}/attempt`);
       setAttemptId(attemptRes.data.attemptId);
       setStarting(false);
 
       // 2. Fetch test details (questions list without correct answers)
-      const testRes = await axios.get(`http://localhost:5000/api/tests/${testId}`);
+      const testRes = await axios.get(`https://smarthire-backend-riay.onrender.com/api/tests/${testId}`);
       setTest(testRes.data.test);
       setQuestions(testRes.data.test.questions || []);
     } catch (err) {
@@ -90,7 +90,7 @@ export default function TestRunner() {
     }));
 
     try {
-      const res = await axios.post(`http://localhost:5000/api/tests/attempts/${attemptId}/submit`, {
+      const res = await axios.post(`https://smarthire-backend-riay.onrender.com/api/tests/${testId}/submit`, {
         answers: formattedAnswers,
       });
       setResult(res.data);

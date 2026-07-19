@@ -24,7 +24,7 @@ export default function Applications() {
   const fetchApplications = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/candidate/applications');
+      const res = await axios.get('https://smarthire-backend-riay.onrender.com/api/candidate/applications');
       setApplications(res.data.applications);
     } catch (err) {
       console.error('Error fetching applications:', err);

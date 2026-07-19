@@ -35,8 +35,8 @@ export default function JobBrowse() {
     setError('');
     try {
       const url = selectedCategory 
-        ? `http://localhost:5000/api/jobs?roleCategory=${selectedCategory}`
-        : 'http://localhost:5000/api/jobs';
+        ? `https://smarthire-backend-riay.onrender.com/api/jobs?category=${selectedCategory}`
+        : 'https://smarthire-backend-riay.onrender.com/api/jobs';
       const res = await axios.get(url);
       setJobs(res.data.jobs);
     } catch (err) {
@@ -50,7 +50,7 @@ export default function JobBrowse() {
   const fetchApplications = async () => {
     try {
       // In M2: we retrieve candidates' applications list to check already applied jobs
-      const res = await axios.get('http://localhost:5000/api/candidate/applications');
+      const res = await axios.get('https://smarthire-backend-riay.onrender.com/api/candidate/applications');
       const mapping = {};
       res.data.applications.forEach(app => {
         mapping[app.jobId] = app.status;
@@ -68,7 +68,7 @@ export default function JobBrowse() {
     setGateTestRequired(null);
 
     try {
-      const res = await axios.post(`http://localhost:5000/api/jobs/${jobId}/apply`);
+      const res = await axios.post(`https://smarthire-backend-riay.onrender.com/api/candidate/apply/${jobId}`);
       setSuccessMsg('Application submitted successfully!');
       setAppliedJobs(prev => ({ ...prev, [jobId]: 'APPLIED' }));
       // Scroll to top

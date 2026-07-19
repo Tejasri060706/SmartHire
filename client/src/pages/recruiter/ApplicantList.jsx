@@ -44,7 +44,7 @@ export default function ApplicantList() {
   const fetchApplicants = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/jobs/${jobId}/applicants?sort=${sortBy}`);
+      const res = await axios.get(`https://smarthire-backend-riay.onrender.com/api/jobs/${jobId}/applicants?sortBy=${sortBy}`);
       setApplicants(res.data.applicants);
       setJobTitle(res.data.jobTitle);
     } catch (err) {
@@ -58,7 +58,7 @@ export default function ApplicantList() {
   const handleShortlist = async (appId) => {
     setActionError('');
     try {
-      await axios.post(`http://localhost:5000/api/applications/${appId}/shortlist`);
+      await axios.post(`https://smarthire-backend-riay.onrender.com/api/applications/${appId}/shortlist`);
       fetchApplicants();
     } catch (err) {
       console.error('Shortlist failed:', err);
@@ -69,7 +69,7 @@ export default function ApplicantList() {
   const handleReject = async (appId) => {
     setActionError('');
     try {
-      await axios.post(`http://localhost:5000/api/applications/${appId}/reject`);
+      await axios.post(`https://smarthire-backend-riay.onrender.com/api/applications/${appId}/reject`);
       fetchApplicants();
     } catch (err) {
       console.error('Rejection failed:', err);
@@ -80,7 +80,7 @@ export default function ApplicantList() {
   const handleHire = async (appId) => {
     setActionError('');
     try {
-      await axios.post(`http://localhost:5000/api/applications/${appId}/hire`);
+      await axios.post(`https://smarthire-backend-riay.onrender.com/api/applications/${appId}/hire`);
       fetchApplicants();
     } catch (err) {
       console.error('Hire failed:', err);
@@ -104,7 +104,7 @@ export default function ApplicantList() {
     setActionError('');
 
     try {
-      await axios.post(`http://localhost:5000/api/applications/${selectedAppId}/interview`, {
+      await axios.post(`https://smarthire-backend-riay.onrender.com/api/applications/${selectedAppId}/interview`, {
         scheduledTime,
         mode,
         notes,
@@ -210,7 +210,7 @@ export default function ApplicantList() {
                   <h3 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">{app.candidateName}</h3>
                   <span className={`badge ${getStatusBadge(app.status)}`}>{app.status}</span>
                   <a
-                    href={`http://localhost:5000${app.resumeUrl}`}
+                    href={`https://smarthire-backend-riay.onrender.com/api/resumes/${app.resumeId}/download`}
                     target="_blank"
                     rel="noreferrer"
                     className="text-xs text-slate-500 hover:text-indigo-400 font-medium inline-flex items-center gap-1 transition-colors ml-2"

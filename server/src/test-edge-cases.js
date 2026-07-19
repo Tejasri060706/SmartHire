@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://smarthire-backend-riay.onrender.com/api';
 
 async function runTests() {
   console.log('--------------------------------------------------');
