@@ -86,7 +86,7 @@ const res = await axios.get(
       const token = localStorage.getItem('token');
 
 const res = await axios.post(
-  `https://smarthire-backend-riay.onrender.com/api/candidate/apply/${jobId}`,
+  `https://smarthire-backend-riay.onrender.com/api/jobs/${jobId}/apply`,
   {},
   {
     headers: {
