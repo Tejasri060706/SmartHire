@@ -30,12 +30,22 @@ export default function JobForm() {
     }
 
     try {
-      await axios.post('https://smarthire-backend-riay.onrender.com/api/jobs', {
-        title,
-        description,
-        requiredSkills,
-        roleCategory,
-      });
+      const token = localStorage.getItem('token');
+
+await axios.post(
+  'https://smarthire-backend-riay.onrender.com/api/jobs',
+  {
+    title,
+    description,
+    requiredSkills,
+    roleCategory,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
       navigate('/recruiter/dashboard');
     } catch (err) {
       console.error('Failed to post job:', err);
